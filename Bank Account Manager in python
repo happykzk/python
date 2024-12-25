@@ -1,0 +1,93 @@
+f = open("Entered.txt", "a")
+f.write("")
+f.close()
+f = open("Entered.txt", "r")
+Entered=f.read()
+f.close()
+if Entered=="yes":
+    f = open("Balance.txt", "r")
+    Balance=f.read()
+    f.close()
+    Balance=int(Balance)
+else:
+    f = open("Entered.txt", "a")
+    f.write("yes")
+    f.close()
+    Balance=0
+    f = open("Balance.txt", "a")
+    f.write("")
+    f.close()
+
+exit=False
+Deposit=0
+Withdraw=0
+years=0
+balancetry=0
+while exit==False:
+    for i in range(1):
+        try:
+            Action=int(input("What action would you like to do first? Enter the number corresponding to the action. 1 - Deposit  2 - Withdraw  3 - Simulate  4 - View  5 - Exit"))
+        except:
+            print("Not Valid. Please try again.")
+            break
+        else:
+            if Action > 5 or Action < 1:
+                print("Not Valid. Please try again.")
+                break
+            else:
+                if Action==1:
+                    try:
+                        Deposit=int(input("How much do you want to deposit?"))
+                    except:
+                        print("Not Valid. Redirected to starting page.")
+                        break
+                    else:
+                        if Deposit<0:
+                            print("That amount is not accepted. Redirected to starting page.")
+                            break
+                        else:
+                            Balance += Deposit
+                            print(Deposit, "has been deposited into your account. Now your account has", Balance)
+                            f = open("Balance.txt", "w")
+                            f.write(str(Balance))
+                            f.close()
+                elif Action==2:
+                    try:
+                        Withdraw=int(input("How much do you want to withdraw?"))
+                    except:
+                        print("Not valid. Redirected to starting page")
+                        break
+                    else:
+                        if Balance<Withdraw:
+                            print("Withdrawal is more than amount in balance. Redirected to starting page.")
+                        elif Withdraw<0:
+                            print("Withdrawal is a negative amount. This is not valid. Redirected to starting page.")
+                        else:
+                            Balance -= Withdraw
+                            print(Withdraw, "has been withdrawn from your account. Now your account has", Balance)
+                            f = open("Balance.txt", "w")
+                            f.write(str(Balance))
+                            f.close()
+                elif Action==3:
+                    try:
+                        years=int(input("How many years do you want to simulate with a 1% interest?"))
+                    except:
+                        print("Not valid. Redirected to starting page.")
+                        break
+                    else:
+                        if years<1:
+                            print("Not a valid amount. Redirected to starting page.")
+                            break
+                        else:
+                            balancetry=Balance
+                            for i in range(years):
+                                balancetry*=1.01
+                            if years==1:
+                                print("In one year, you would have a total of", round(balancetry, 2), "in your balance.")
+                            else:
+                                print("In", years, "years, you would have a total of", round(balancetry, 2), "in your balance.")
+                elif Action==4:
+                    print("You currently have", Balance)
+                else:
+                    print("You have exited the system.")
+                    exit=True
